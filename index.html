@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>heydia, the assistant that runs your day</title>
+<meta name="description" content="heydia reads your calendar and inbox, takes your meeting notes, sorts your priorities, and acts across the apps you already use.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<style>
+/* ── 3D renders (3dicons.co by @realvjy, CC0) + liquid glass — homepage only ───────── */
+.hero .wrap{position:relative;z-index:3}
+.hero-3d{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.f3w{position:absolute;left:var(--x);top:var(--y);will-change:transform}
+.f3d{display:block;width:var(--s);transform:rotate(var(--r));animation:f3float var(--d,11s) ease-in-out infinite alternate;
+  filter:drop-shadow(0 24px 40px rgba(0,0,0,.55)) drop-shadow(0 2px 8px rgba(255,196,110,.18))}
+@keyframes f3float{from{translate:0 -10px}to{translate:0 12px}}
+@media(max-width:1080px){.hero-3d{display:none}}
+@media(prefers-reduced-motion:reduce){.f3d{animation:none}}
+
+/* soft molten glow blobs behind the hero (brand gold + a cool counter-tone) */
+.lg-blob{position:absolute;z-index:0;border-radius:50%;filter:blur(48px);pointer-events:none;opacity:.5;
+  animation:lgmorph 18s ease-in-out infinite alternate}
+.lg-blob.b1{width:520px;height:440px;left:2%;top:8%;background:radial-gradient(closest-side,rgba(255,183,94,.24),transparent 72%)}
+.lg-blob.b2{width:560px;height:460px;right:1%;top:20%;background:radial-gradient(closest-side,rgba(94,150,255,.16),transparent 72%);animation-delay:-9s}
+@keyframes lgmorph{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,-22px) scale(1.14)}}
+@media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
+
+/* frosted glass on the download tiles + trust chips (dark glass: light film over blur) */
+.dl,.chip{backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
+  background:rgba(255,255,255,.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 30px -18px rgba(0,0,0,.8)}
+.dl:hover{background:rgba(255,255,255,.09)}
+
+/* 3D icon accent peeking over the corner of each feature window */
+.feature-stage{position:relative}
+.feat3d{position:absolute;z-index:5;width:76px;top:-30px;left:-26px;pointer-events:none;
+  filter:drop-shadow(0 16px 26px rgba(0,0,0,.6));animation:f3float 10s ease-in-out infinite alternate}
+.feature.flip .feat3d{left:auto;right:-26px}
+@media(max-width:900px){.feat3d{width:56px;top:-22px;left:-14px}.feature.flip .feat3d{right:-14px}}
+@media(prefers-reduced-motion:reduce){.feat3d{animation:none}}
+
+/* specular sheen sweep across the app windows on hover */
+.win{position:relative}
+.win::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.22) 50%,transparent 58%);
+  background-size:240% 100%;background-position:135% 0;opacity:0}
+.feature-stage:hover .win::after{opacity:1;animation:lgsheen 1s ease forwards}
+@keyframes lgsheen{to{background-position:-45% 0}}
+@media(prefers-reduced-motion:reduce){.win::after{display:none}}
+</style>
+</head>
+<body>
+
+<nav><div class="nav-in">
+  <a class="word" href="index.html"><span class="mark"></span>heydia</a>
+  <div class="nav-mid">
+    <a href="features.html">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="blog.html">Blog</a>
+    <a href="help.html">Help</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-end">
+    <a class="login" href="https://heydia.onrender.com">Log in</a>
+    <a class="btn btn-primary" href="https://heydia.onrender.com">Get early access</a>
+  </div>
+</div></nav>
+
+<header class="hero has-video">
+  <div class="hero-video" aria-hidden="true">
+    <div class="poster"></div>
+    <video id="heroVid" muted loop playsinline preload="none" poster="assets/video/hero-poster.jpg">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="lg-blob b1" aria-hidden="true"></div>
+  <div class="lg-blob b2" aria-hidden="true"></div>
+  <!-- Floating 3D renders — 3dicons.co by @realvjy, CC0 1.0 (public domain) -->
+  <div class="hero-3d" aria-hidden="true">
+    <span class="f3w" style="--x:4%;--y:12%" data-p="0.05"><img class="f3d" src="assets/3d/calender.png" alt="" style="--s:118px;--r:-12deg;--d:11s"></span>
+    <span class="f3w" style="--x:11%;--y:58%" data-p="0.12"><img class="f3d" src="assets/3d/music.png" alt="" style="--s:92px;--r:10deg;--d:9s"></span>
+    <span class="f3w" style="--x:2%;--y:82%" data-p="0.16"><img class="f3d" src="assets/3d/sphere.png" alt="" style="--s:70px;--r:0deg;--d:13s"></span>
+    <span class="f3w" style="--x:87%;--y:9%" data-p="0.07"><img class="f3d" src="assets/3d/mail.png" alt="" style="--s:126px;--r:11deg;--d:12s"></span>
+    <span class="f3w" style="--x:90%;--y:52%" data-p="0.13"><img class="f3d" src="assets/3d/target.png" alt="" style="--s:96px;--r:-8deg;--d:10s"></span>
+    <span class="f3w" style="--x:82%;--y:83%" data-p="0.18"><img class="f3d" src="assets/3d/glass.png" alt="" style="--s:78px;--r:9deg;--d:8s"></span>
+    <span class="f3w" style="--x:22%;--y:2%" data-p="0.2"><img class="f3d" src="assets/3d/star.png" alt="" style="--s:52px;--r:14deg;--d:8s"></span>
+    <span class="f3w" style="--x:73%;--y:1%" data-p="0.22"><img class="f3d" src="assets/3d/rocket.png" alt="" style="--s:60px;--r:-14deg;--d:12s"></span>
+  </div>
+  <div class="wrap">
+    <div class="hero-logo" id="heroLogo"><span class="mark"></span></div>
+    <h1 class="heroline">
+      <span class="line"><span class="w" style="--d:.05s">Your</span> <span class="w" style="--d:.14s">whole</span> <span class="w" style="--d:.23s">day,</span></span>
+      <span class="line"><em><span class="w" style="--d:.38s">on</span> <span class="w" style="--d:.47s">autopilot.</span></em></span>
+    </h1>
+    <p>heydia reads your calendar and inbox, takes your meeting notes, sorts your priorities, and acts across the apps you already use. Ask once, it's handled.</p>
+    <div class="dl-row">
+      <a class="dl" id="dlWin" href="https://github.com/codinglamine/dia/releases/latest" title="Download for Windows 10/11">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 5.1 10.4 4v7.1H3zM10.4 12.9V20L3 18.9v-6zM11.6 3.85 21 2.5v8.6h-9.4zM21 12.9v8.6l-9.4-1.35V12.9z"/></svg>
+        <span><small>Download for</small><b>Windows</b></span>
+      </a>
+      <span class="dl soon" title="macOS build isn't ready yet" aria-disabled="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.8-.8-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.8M14.2 5.6c.6-.8 1.1-1.9.9-3-1 0-2.1.7-2.8 1.4-.6.7-1.1 1.8-1 2.9 1.1.1 2.2-.6 2.9-1.3"/></svg>
+        <span><small>Not on</small><b>macOS yet</b></span>
+        <em class="soon-tag">Soon</em>
+      </span>
+      <span class="dl soon" title="iOS app isn't available yet" aria-disabled="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.4 5.6c.6-.8 1.1-1.9.9-3-1 0-2.1.7-2.8 1.4-.6.7-1.1 1.8-1 2.9 1.1.1 2.2-.6 2.9-1.3m2 7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.8-.8-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.2c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.8"/></svg>
+        <span><small>Not on the</small><b>App Store yet</b></span>
+        <em class="soon-tag">Soon</em>
+      </span>
+      <span class="dl soon" title="Android app isn't available yet" aria-disabled="true">
+        <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M3.6 2.3c-.3.3-.5.7-.5 1.3v16.8c0 .6.2 1 .5 1.3l.1.1L13 12.1v-.2zM16.8 15.3 13.9 12.4l3-2.9 3.5 2c1 .6 1 1.5 0 2.1zm-1-3.3L4.6 1.6l11.2 6.5 2 1.1zM4.6 22.4l11.2-10.4 2 2-13.2 7.6z"/></svg>
+        <span><small>Not on</small><b>Google Play yet</b></span>
+        <em class="soon-tag">Soon</em>
+      </span>
+    </div>
+    <div class="hero-proof"><span class="stars">★★★★★</span> Built for deep days · bring your own AI key · your data stays yours</div>
+
+    <!-- device mockup: the real heydia interface, in a laptop frame -->
+    <div class="hmock" id="heroMock">
+      <div class="hmock-lid">
+        <div class="hmock-screen">
+          <!-- Real heydia screenshot. To update it, replace site/screens/home.png with a fresh
+               capture of your Home screen. If the image is missing it falls back to the drawn UI below. -->
+          <img class="hm-shot" src="screens/home.png" alt="heydia Home" loading="lazy" onerror="this.remove()">
+          <div class="hm-top">
+            <span class="hm-dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></span>
+            <span class="hm-word"><span class="hm-mark"></span>heydia</span>
+            <span class="hm-nav"><span class="hm-pill">Home</span><span>Chat</span><span>Day</span><span>Screen</span></span>
+            <span class="hm-clock">17:02</span>
+          </div>
+          <div class="hm-body">
+            <div class="hm-hero"><span class="hm-bigmark"></span><div class="hm-greet">Good afternoon, Lamine</div><div class="hm-ask">Ask heydia anything…</div></div>
+            <div class="hm-grid">
+              <div class="hm-card"><div class="hm-h">BRIEFING</div><div class="hm-t">Midday holds steady, sir. Two events, nineteen tasks, eleven urgent.</div><div class="hm-chips"><span></span><span></span><span></span></div></div>
+              <div class="hm-card"><div class="hm-h">SCREEN TIME</div><div class="hm-big">4h 12m</div><div class="hm-ring"></div></div>
+              <div class="hm-card"><div class="hm-h">GOALS</div><div class="hm-line"></div><div class="hm-line short"></div><div class="hm-line"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hmock-base"></div>
+    </div>
+  </div>
+  <div class="hero-word" id="heroWord" aria-hidden="true">heydia</div>
+</header>
+
+<!-- ASCII reaching hands (Creation of Adam) — white character-art on black -->
+<section class="hands-band" aria-label="The reach">
+  <canvas id="asciiHands"></canvas>
+  <div class="hands-cap wrap reveal">
+    <span class="label">The reach</span>
+    <p>You start it. heydia meets you halfway — across every app you already use.</p>
+  </div>
+</section>
+
+<!-- DEVICES -->
+<section class="block reveal" style="text-align:center;padding-top:20px">
+  <span class="label">On every screen</span>
+  <h2 style="font-family:var(--serif);font-weight:500;font-size:clamp(28px,4.2vw,46px);letter-spacing:-.02em;margin:14px 0 8px">Desktop today, your pocket soon</h2>
+  <p style="color:var(--soft);max-width:48ch;margin:0 auto 30px">The same calm assistant, framed on the devices you use. Windows now; iPad and iPhone are on the way.</p>
+  <div class="devices">
+    <div class="dv-tablet"><div class="scr"><img class="dv-shot" src="screens/day.png" alt="heydia on iPad" loading="lazy" onerror="this.outerHTML='&lt;div class=dv-ph&gt;&lt;span class=mark&gt;&lt;/span&gt;&lt;/div&gt;'"></div></div>
+    <div class="dv-laptop">
+      <div class="lid"><div class="scr"><img class="dv-shot" src="screens/home.png" alt="heydia on a laptop" loading="lazy" onerror="this.outerHTML='&lt;div class=dv-ph&gt;&lt;span class=mark&gt;&lt;/span&gt;&lt;/div&gt;'"></div></div>
+      <div class="base"></div>
+    </div>
+    <div class="dv-phone"><span class="island"></span><div class="scr"><img class="dv-shot" src="screens/chat.png" alt="heydia on iPhone" loading="lazy" onerror="this.outerHTML='&lt;div class=dv-ph&gt;&lt;span class=mark&gt;&lt;/span&gt;&lt;/div&gt;'"></div></div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust wrap reveal" style="padding-bottom:48px">
+  <span class="label">One app instead of a dozen open tabs</span>
+  <div class="chips">
+    <span class="chip">Mail &amp; calendar</span>
+    <span class="chip">Meeting notes</span>
+    <span class="chip">Priorities</span>
+    <span class="chip">Weather</span>
+    <span class="chip">Music &amp; F1</span>
+    <span class="chip">Real memory</span>
+    <span class="chip">14+ connectors</span>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section class="block wrap" id="demo" style="padding-top:24px">
+  <div class="head reveal" style="margin-bottom:34px">
+    <span class="label">Live demo</span>
+    <h2>Ask once. Watch it <em>act</em>.</h2>
+  </div>
+  <div class="demo reveal" role="img" aria-label="A conversation with heydia: you ask what your day looks like, and it answers and takes action across your apps.">
+    <div class="demo-bar"><span class="d-dot"></span><span class="d-dot"></span><span class="d-dot"></span><span class="d-title"><span class="mark sm"></span>heydia</span></div>
+    <div class="demo-feed" id="feed"></div>
+    <div class="demo-input">
+      <div class="di-box" id="diBox"><span class="di-text" id="diText"></span><span class="di-caret"></span><span class="di-ph">Message heydia</span></div>
+      <button class="di-send" tabindex="-1" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE SHOWCASE (scroll-revealed big screens) -->
+<section class="block band">
+  <div class="wrap wide">
+    <div class="head reveal"><span class="label">Everything, in one window</span><h2>Not a chatbot. <em>Your whole day,</em> handled.</h2><p>Scroll through what heydia actually does. Every screen is the real app.</p></div>
+
+    <!-- 1 HOME -->
+    <div class="feature">
+      <div class="feature-copy reveal rl">
+        <span class="tag"><span class="tdot"></span>Home</span>
+        <h3>A home that reads you the day</h3>
+        <p>Open heydia and you don't get a blank box, you get a read on your whole day. A spoken-style morning brief stitches together your weather, your calendar, how many tasks are flagged urgent, your next meeting, even the F1 weekend or the headlines you actually follow, and lays it all out in one calm glance.</p>
+        <p>The orb sits at the centre. Tap it and just talk, or type a question and watch it pull the answer from across your connected apps.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>A morning brief written for you, in plain language</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Weather, events, tasks, music and news in one place</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Tap the orb to talk, type to ask anything</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rr">
+        <img class="feat3d" src="assets/3d/clock.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Home</span></div>
+          <div class="win-shot"><img src="screens/home.png" alt="heydia Home" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span><span class="m-line m"></span></div></div><div class="m-card"><span class="m-line m d"></span><span class="m-line xl"></span><span class="m-line l"></span><span class="m-line m"></span></div><div class="m-cards"><div class="m-card"><span class="m-line s d"></span><span class="m-line m"></span></div><div class="m-card"><span class="m-line s d"></span><span class="m-line s"></span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 CHAT -->
+    <div class="feature flip">
+      <div class="feature-copy reveal rr">
+        <span class="tag"><span class="tdot"></span>Chat &amp; agent</span>
+        <h3>Ask once. It does the work.</h3>
+        <p>This is not a chatbot that stops at advice. Ask heydia in plain words and it reasons, searches the web with real citations, then acts across the tools you've connected: sending the email, moving the event, creating the playlist, opening the page.</p>
+        <p>Every chat remembers what you're working on, so you never start from zero, and a temporary mode lets you ask something off the record, with nothing saved to history or memory.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Real actions across your apps, not just replies</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Web search with citations you can check</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Memory across chats, plus a private temporary mode</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rl">
+        <img class="feat3d" src="assets/3d/bulb.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Chat</span></div>
+          <div class="win-shot"><img src="screens/chat.png" alt="heydia Chat" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span></div></div><div class="m-chat"><div class="m-bub ai"><span class="m-line" style="width:80px"></span><span class="m-line" style="width:54px"></span></div><div class="m-bub me"><span class="m-line" style="width:64px"></span></div><div class="m-bub ai"><span class="m-line" style="width:70px"></span><span class="m-line" style="width:46px"></span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 PRIORITIES -->
+    <div class="feature">
+      <div class="feature-copy reveal rl">
+        <span class="tag"><span class="tdot"></span>Priorities</span>
+        <h3>Your day, triaged before you wake up</h3>
+        <p>Every morning heydia sorts your tasks into the Eisenhower matrix, do it now, plan it, delegate, drop it, so the first thing you see is what actually matters, not a flat to-do list a mile long.</p>
+        <p>Your meetings, habits and deadlines sit right alongside it, and one tap re-runs the triage whenever the day changes. Drag anything between quadrants and it stays put.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Auto-triage into the four quadrants every morning</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Meetings, habits and tasks on one day view</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Drag and drop to reprioritise in a second</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rr">
+        <img class="feat3d" src="assets/3d/target.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Day</span></div>
+          <div class="win-shot"><img src="screens/day.png" alt="heydia Day and Priorities" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span><span class="m-line m"></span></div></div><div class="m-grid"><div class="hot"><span class="m-line s"></span><span class="m-line m"></span></div><div><span class="m-line s d"></span><span class="m-line m"></span></div><div><span class="m-line s d"></span><span class="m-line s"></span></div><div><span class="m-line s d"></span><span class="m-line m"></span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 WEATHER -->
+    <div class="feature flip">
+      <div class="feature-copy reveal rr">
+        <span class="tag"><span class="tdot"></span>Weather</span>
+        <h3>Weather you can plan around</h3>
+        <p>Not just a number. heydia gives you the feels-like temperature, an hour-by-hour strip you can scrub through, a smooth 24-hour curve, and a seven-day outlook you can open day by day.</p>
+        <p>When a heatwave or a storm is on the way it surfaces a plain-language alert at the top, so you know to grab a jacket or stay hydrated before you ever walk out the door.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Hourly strip and a scrubbable 24-hour curve</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Seven-day forecast, expandable per day</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Plain-language heat and storm alerts</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rl">
+        <img class="feat3d" src="assets/3d/sun.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Weather</span></div>
+          <div class="win-shot"><img src="screens/weather.png" alt="heydia Weather" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span><span class="m-line m"></span></div></div><div class="m-curve"><svg viewBox="0 0 200 120" preserveAspectRatio="none"><polyline points="0,80 30,68 60,72 90,46 120,56 150,28 200,40" fill="none" stroke="#c9cdd8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="m-hours"><i></i><i></i><i></i><i></i><i></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 MEETINGS & NOTES -->
+    <div class="feature">
+      <div class="feature-copy reveal rl">
+        <span class="tag"><span class="tdot"></span>Meetings &amp; notes</span>
+        <h3>Meetings turn into notes by themselves</h3>
+        <p>Hit record for an in-person conversation or a call and heydia transcribes it, then writes clean, titled notes with the decisions and action items pulled out for you.</p>
+        <p>The editor is proper rich text, bold, highlights, colours, headings, pins, and you and heydia can both write in the same note. Everything syncs to Google Docs, so your work lives where your team already looks.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Records in person or on a call, then writes it up</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Titled notes with decisions and action items</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Rich editor with Google Docs sync</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rr">
+        <img class="feat3d" src="assets/3d/pencil.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Notes</span></div>
+          <div class="win-shot"><img src="screens/notes.png" alt="heydia Notes and Docs" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span><span class="m-line l"></span></div></div><div class="m-card"><span class="m-line m d"></span><span class="m-line xl"></span><span class="m-line l"></span><span class="m-line m"></span><span class="m-line l"></span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 MESSAGES -->
+    <div class="feature flip">
+      <div class="feature-copy reveal rr">
+        <span class="tag"><span class="tdot"></span>Messages</span>
+        <h3>One inbox for everything</h3>
+        <p>Mail, Slack and your chats land in a single, searchable place, so you stop bouncing between five tabs to find one thread. heydia surfaces what's important, summarises the noisy ones, and lets you act, reply, send, archive, without leaving the window.</p>
+        <p>Search runs across all of it at once, with all-time history, so the thing you half-remember from three months ago is one query away.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Mail, Slack and chats in one unified inbox</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Important surfaced, the noisy ones summarised</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>One search across everything, all-time</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rl">
+        <img class="feat3d" src="assets/3d/mail.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Messages</span></div>
+          <div class="win-shot"><img src="screens/messages.png" alt="heydia unified inbox" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span></div></div><div class="m-card"><span class="m-line s d"></span><span class="m-line l"></span></div><div class="m-card"><span class="m-line s d"></span><span class="m-line m"></span></div><div class="m-card"><span class="m-line s d"></span><span class="m-line l"></span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 ENTERTAINMENT -->
+    <div class="feature">
+      <div class="feature-copy reveal rl">
+        <span class="tag"><span class="tdot"></span>Entertainment</span>
+        <h3>Your music and your race weekend</h3>
+        <p>heydia drives Spotify directly, search, play, queue, pin the playlists you actually use, and control the volume without breaking your flow. YouTube and more sit in the same place.</p>
+        <p>It's race-week aware too: when a Grand Prix is coming it flips on an F1 theme, counts down to lights out, and drops a watch-live button right where you are, with the full driver and team standings a tap away.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Full Spotify control with pinned playlists</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Race-week F1 mode with a live countdown</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Standings, calendar and YouTube built in</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rr">
+        <img class="feat3d" src="assets/3d/music.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Entertainment</span></div>
+          <div class="win-shot"><img src="screens/entertainment.png" alt="heydia Entertainment" onerror="this.remove()">
+            <div class="mock"><div class="m-top"><span class="m-mk"></span><div class="m-ttls"><span class="m-line s d"></span><span class="m-line m"></span></div></div><div class="m-cards"><div class="m-card"></div><div class="m-card"></div><div class="m-card"></div></div><div class="m-cards"><div class="m-card"></div><div class="m-card"></div><div class="m-card"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 THEMES -->
+    <div class="feature flip">
+      <div class="feature-copy reveal rr">
+        <span class="tag"><span class="tdot"></span>Themes &amp; customization</span>
+        <h3>Make it yours</h3>
+        <p>heydia isn't one-size-fits-all. Switch between a calm light theme and a deep dark one, flip on the F1 theme on race weekend, and tune the assistant's persona, the layout, and which widgets you even see.</p>
+        <p>Plus and Pro unlock the full set, every theme, custom personas, and a home dashboard you arrange yourself, so the app ends up feeling like it was built for exactly the way you work.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Light, dark and seasonal themes</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Custom persona, layout and widgets</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Arrange your own home dashboard</li>
+        </ul>
+      </div>
+      <div class="feature-stage reveal rl">
+        <img class="feat3d" src="assets/3d/crown.png" alt="" loading="lazy" aria-hidden="true">
+        <div class="win"><div class="win-bar"><i></i><i></i><i></i><span class="wt">heydia / Dark</span></div>
+          <div class="win-shot"><img src="screens/themes.png" alt="heydia dark theme" onerror="this.remove()">
+            <div class="mock" style="background:linear-gradient(180deg,#15161c,#0e0f14)"><div class="m-top"><span class="m-mk" style="background:#2a2d36"></span><div class="m-ttls"><span class="m-line s" style="background:#2a2d36"></span></div></div><div class="m-chat"><div class="m-bub ai" style="background:#23252e"><span class="m-line" style="width:80px;background:#3a3d47"></span></div><div class="m-bub me" style="background:#3b5bff"><span class="m-line" style="width:60px;background:rgba(255,255,255,.4)"></span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECTORS -->
+<section class="block wrap conn-wrap" style="text-align:center">
+  <span class="label">Connectors</span>
+  <h2 style="font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.4vw,48px);letter-spacing:-.02em;margin:14px 0 12px">Plug in your whole world</h2>
+  <p style="color:var(--soft);margin-bottom:30px">Start with a few, open up the rest in a tap, or request one we do not have yet.</p>
+  <div class="conn-rail">
+      <button class="conn" style="background:#EA4335"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg><span class="nm">Gmail</span></button>
+      <button class="conn" style="background:#4285F4"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M18.316 5.684H24v12.632h-5.684V5.684zM5.684 24h12.632v-5.684H5.684V24zM18.316 5.684V0H1.895A1.894 1.894 0 0 0 0 1.895v16.421h5.684V5.684h12.632zm-7.207 6.25v-.065c.272-.144.5-.349.687-.617s.279-.595.279-.982c0-.379-.099-.72-.3-1.025a2.05 2.05 0 0 0-.832-.714 2.703 2.703 0 0 0-1.197-.257c-.6 0-1.094.156-1.481.467-.386.311-.65.671-.793 1.078l1.085.452c.086-.249.224-.461.413-.633.189-.172.445-.257.767-.257.33 0 .602.088.816.264a.86.86 0 0 1 .322.703c0 .33-.12.589-.36.778-.24.19-.535.284-.886.284h-.567v1.085h.633c.407 0 .748.109 1.02.327.272.218.407.499.407.843 0 .336-.129.614-.387.832s-.565.327-.924.327c-.351 0-.651-.103-.897-.311-.248-.208-.422-.502-.521-.881l-1.096.452c.178.616.505 1.082.977 1.401.472.319.984.478 1.538.477a2.84 2.84 0 0 0 1.293-.291c.382-.193.684-.458.902-.794.218-.336.327-.72.327-1.149 0-.429-.115-.797-.344-1.105a2.067 2.067 0 0 0-.881-.689zm2.093-1.931l.602.913L15 10.045v5.744h1.187V8.446h-.827l-2.158 1.557zM22.105 0h-3.289v5.184H24V1.895A1.894 1.894 0 0 0 22.105 0zm-3.289 23.5l4.684-4.684h-4.684V23.5zM0 22.105C0 23.152.848 24 1.895 24h3.289v-5.184H0v3.289z"/></svg><span class="nm">Calendar</span></button>
+      <button class="conn" style="background:#1DB954"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg><span class="nm">Spotify</span></button>
+      <button class="conn" style="background:#000000"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z"/></svg><span class="nm">Notion</span></button>
+      <button class="conn" style="background:#611F69"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg><span class="nm">Slack</span></button>
+      <button class="conn more" id="connMore" aria-expanded="false" aria-controls="connGrid">+9 more</button>
+  </div>
+  <div class="conn-grid" id="connGrid">
+      <button class="conn" style="background:#EA4335"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg><span class="nm">Gmail</span></button>
+      <button class="conn" style="background:#4285F4"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M18.316 5.684H24v12.632h-5.684V5.684zM5.684 24h12.632v-5.684H5.684V24zM18.316 5.684V0H1.895A1.894 1.894 0 0 0 0 1.895v16.421h5.684V5.684h12.632zm-7.207 6.25v-.065c.272-.144.5-.349.687-.617s.279-.595.279-.982c0-.379-.099-.72-.3-1.025a2.05 2.05 0 0 0-.832-.714 2.703 2.703 0 0 0-1.197-.257c-.6 0-1.094.156-1.481.467-.386.311-.65.671-.793 1.078l1.085.452c.086-.249.224-.461.413-.633.189-.172.445-.257.767-.257.33 0 .602.088.816.264a.86.86 0 0 1 .322.703c0 .33-.12.589-.36.778-.24.19-.535.284-.886.284h-.567v1.085h.633c.407 0 .748.109 1.02.327.272.218.407.499.407.843 0 .336-.129.614-.387.832s-.565.327-.924.327c-.351 0-.651-.103-.897-.311-.248-.208-.422-.502-.521-.881l-1.096.452c.178.616.505 1.082.977 1.401.472.319.984.478 1.538.477a2.84 2.84 0 0 0 1.293-.291c.382-.193.684-.458.902-.794.218-.336.327-.72.327-1.149 0-.429-.115-.797-.344-1.105a2.067 2.067 0 0 0-.881-.689zm2.093-1.931l.602.913L15 10.045v5.744h1.187V8.446h-.827l-2.158 1.557zM22.105 0h-3.289v5.184H24V1.895A1.894 1.894 0 0 0 22.105 0zm-3.289 23.5l4.684-4.684h-4.684V23.5zM0 22.105C0 23.152.848 24 1.895 24h3.289v-5.184H0v3.289z"/></svg><span class="nm">Calendar</span></button>
+      <button class="conn" style="background:#1A73E8"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M14.727 6.727H14V0H4.91c-.905 0-1.637.732-1.637 1.636v20.728c0 .904.732 1.636 1.636 1.636h14.182c.904 0 1.636-.732 1.636-1.636V6.727h-6zm-.545 10.455H7.09v-1.364h7.09v1.364zm2.727-3.273H7.091v-1.364h9.818v1.364zm0-3.273H7.091V9.273h9.818v1.363zM14.727 6h6l-6-6v6z"/></svg><span class="nm">Docs</span></button>
+      <button class="conn" style="background:#1FA463"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M12.01 1.485c-2.082 0-3.754.02-3.743.047.01.02 1.708 3.001 3.774 6.62l3.76 6.574h3.76c2.081 0 3.753-.02 3.742-.047-.005-.02-1.708-3.001-3.775-6.62l-3.76-6.574zm-4.76 1.73a789.828 789.861 0 0 0-3.63 6.319L0 15.868l1.89 3.298 1.885 3.297 3.62-6.335 3.618-6.33-1.88-3.287C8.1 4.704 7.255 3.22 7.25 3.214zm2.259 12.653-.203.348c-.114.198-.96 1.672-1.88 3.287a423.93 423.948 0 0 1-1.698 2.97c-.01.026 3.24.042 7.222.042h7.244l1.796-3.157c.992-1.734 1.85-3.23 1.906-3.323l.104-.167h-7.249z"/></svg><span class="nm">Drive</span></button>
+      <button class="conn" style="background:#1DB954"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg><span class="nm">Spotify</span></button>
+      <button class="conn" style="background:#000000"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z"/></svg><span class="nm">Notion</span></button>
+      <button class="conn" style="background:#611F69"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg><span class="nm">Slack</span></button>
+      <button class="conn" style="background:#181717"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="nm">GitHub</span></button>
+      <button class="conn" style="background:#4772FA"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12h-2.7c0 5.128-4.172 9.3-9.3 9.3-5.128 0-9.3-4.172-9.3-9.3 0-5.128 4.172-9.3 9.3-9.3V0Zm7.4 2.583-7.505 9.371L8.388 9.08l-2.002 2.436 4.741 3.888a1.573 1.573 0 0 0 2.231-.233l8.504-10.617L19.4 2.583Z"/></svg><span class="nm">TickTick</span></button>
+      <button class="conn" style="background:#0078D4"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M7.88 12.04q0 .45-.11.87-.1.41-.33.74-.22.33-.58.52-.37.2-.87.2t-.85-.2q-.35-.21-.57-.55-.22-.33-.33-.75-.1-.42-.1-.86t.1-.87q.1-.43.34-.76.22-.34.59-.54.36-.2.87-.2t.86.2q.35.21.57.55.22.34.31.77.1.43.1.88zM24 12v9.38q0 .46-.33.8-.33.32-.8.32H7.13q-.46 0-.8-.33-.32-.33-.32-.8V18H1q-.41 0-.7-.3-.3-.29-.3-.7V7q0-.41.3-.7Q.58 6 1 6h6.5V2.55q0-.44.3-.75.3-.3.75-.3h12.9q.44 0 .75.3.3.3.3.75V10.85l1.24.72h.01q.1.07.18.18.07.12.07.25zm-6-8.25v3h3v-3zm0 4.5v3h3v-3zm0 4.5v1.83l3.05-1.83zm-5.25-9v3h3.75v-3zm0 4.5v3h3.75v-3zm0 4.5v2.03l2.41 1.5 1.34-.8v-2.73zM9 3.75V6h2l.13.01.12.04v-2.3zM5.98 15.98q.9 0 1.6-.3.7-.32 1.19-.86.48-.55.73-1.28.25-.74.25-1.61 0-.83-.25-1.55-.24-.71-.71-1.24t-1.15-.83q-.68-.3-1.55-.3-.92 0-1.64.3-.71.3-1.2.85-.5.54-.75 1.3-.25.74-.25 1.63 0 .85.26 1.56.26.72.74 1.23.48.52 1.17.81.69.3 1.56.3zM7.5 21h12.39L12 16.08V17q0 .41-.3.7-.29.3-.7.3H7.5zm15-.13v-7.24l-5.9 3.54Z"/></svg><span class="nm">Outlook</span></button>
+      <button class="conn" style="background:#0A66C2"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span class="nm">LinkedIn</span></button>
+      <button class="conn" style="background:#20808D"><svg viewBox="0 0 24 24" width="25" height="25" fill="#fff"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg><span class="nm">Perplexity</span></button>
+      <a class="conn req" href="mailto:dia.customersupport@gmail.com?subject=Connector%20request%20for%20heydia&body=I%27d%20love%20heydia%20to%20connect%20with%3A%20" title="Request a connector"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="nm">Request</span></a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="block band">
+  <div class="wrap">
+    <div class="head reveal"><span class="label">How it works</span><h2>Up and running in four steps</h2><p>No setup marathon. Connect what you already use and heydia starts working the same day.</p></div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h3>Create your account</h3><p>Sign up free in seconds, with email or Google.</p></div>
+      <div class="step reveal"><div class="n">02</div><h3>Connect your tools</h3><p>Link Gmail, Calendar, Spotify, Notion and more with one click each.</p></div>
+      <div class="step reveal"><div class="n">03</div><h3>Add your AI key</h3><p>Paste your own key once. You only ever pay for what you use.</p></div>
+      <div class="step reveal"><div class="n">04</div><h3>Ask once, it runs your day</h3><p>Chat, and heydia acts across mail, calendar, notes and tasks.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="block wrap" style="text-align:center">
+  <div class="head reveal" style="margin-bottom:32px"><span class="label">Private by design</span><h2>Privacy first, <em>with you in control</em></h2></div>
+  <div class="toggles reveal">
+    <span class="toggle on"><span class="sw"></span>Your own AI key <span class="st">On</span></span>
+    <span class="toggle"><span class="sw"></span>Data sold <span class="st">Off</span></span>
+    <span class="toggle on"><span class="sw"></span>Encrypted sync <span class="st">On</span></span>
+    <span class="toggle"><span class="sw"></span>Train on your data <span class="st">Off</span></span>
+    <span class="toggle on"><span class="sw"></span>Export anytime <span class="st">On</span></span>
+    <span class="toggle on"><span class="sw"></span>Revoke any app <span class="st">On</span></span>
+  </div>
+  <p class="reveal" style="color:var(--soft);max-width:54ch;margin:8px auto 0;font-size:17px">heydia was built local-first. Your conversations and connected accounts are yours, never sold, never used to train models, and you can export or delete everything at any time.</p>
+</section>
+
+<section class="cta-band wrap">
+  <div class="reveal">
+    <h2>Ready for a <em>calmer</em> day?</h2>
+    <p>heydia is in early access. Join the list and we'll email you the moment your spot opens.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="https://heydia.onrender.com">Get early access</a>
+      <a class="btn btn-ghost btn-lg" href="pricing.html">See pricing</a>
+    </div>
+    <p class="micro">Currently a desktop app for Windows · cloud and mobile coming soon</p>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="foot-top">
+    <div class="foot-grid">
+      <div><div class="word"><span class="mark"></span>heydia</div></div>
+      <div><h4>Product</h4><ul><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="#demo">Demo</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="mailto:dia.customersupport@gmail.com">Contact</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="help.html">Help</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    </div>
+    <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
+      <defs><path id="circ" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+      <text><textPath href="#circ" startOffset="0">heydia · runs your whole day · built in paris · </textPath></text>
+      <g class="mk"><rect x="49" y="49" width="22" height="22" rx="7"/></g><circle cx="56" cy="56" r="3.4" fill="#fff"/>
+    </svg>
+  </div>
+  <div class="foot-bottom"><span>© 2026 heydia</span><span>Made for your day</span></div>
+</div></footer>
+
+<script>
+  // scroll reveal
+  (function(){var e=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver'in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){e.forEach(function(x){x.classList.add('in')});return}
+    var o=new IntersectionObserver(function(s){s.forEach(function(n){if(n.isIntersecting){n.target.classList.add('in');o.unobserve(n.target)}})},{threshold:.06,rootMargin:'0px 0px -7% 0px'});
+    e.forEach(function(x){o.observe(x)})})();
+  // hero scroll: fade the small logo, fade the giant wordmark down/out, lift the mockup
+  (function(){var l=document.getElementById('heroLogo'),w=document.getElementById('heroWord'),m=document.getElementById('heroMock');
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+    var t=false;function up(){var y=scrollY;
+      if(l){l.style.opacity=Math.max(0,1-y/300).toFixed(2);l.style.transform='translateY('+(y*-0.1)+'px)'}
+      if(w){w.style.opacity=Math.max(0,0.055-y/5000).toFixed(3);w.style.transform='translateY('+(y*0.2)+'px)'}
+      if(m){m.style.transform='translateY('+(y*-0.05)+'px)'}
+      t=false}
+    addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(up)}},{passive:true});})();
+  // gentle scroll parallax for the floating 3D renders
+  (function(){var e=document.querySelectorAll('.f3w[data-p]');
+    if(!e.length||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+    var t=false;function mv(){t=false;var y=scrollY||0;e.forEach(function(n){n.style.transform='translateY('+(-y*parseFloat(n.dataset.p)).toFixed(1)+'px)'})}
+    addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(mv)}},{passive:true});})();
+  // expand connectors
+  (function(){var b=document.getElementById('connMore'),g=document.getElementById('connGrid'),r=document.querySelector('.conn-rail');if(!b||!g)return;
+    b.addEventListener('click',function(){var open=g.classList.toggle('open');if(r)r.classList.toggle('railhide',open);b.setAttribute('aria-expanded',open);b.textContent=open?'Show less':'+9 more';
+      if(open){g.querySelectorAll('.conn').forEach(function(c,i){c.style.animationDelay=(i*30)+'ms'})}});})();
+  // self-running chat demo with input box + orb avatars
+  (function(){
+    var feed=document.getElementById('feed');if(!feed)return;
+    var diBox=document.getElementById('diBox'),diText=document.getElementById('diText');
+    var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var script=[
+      {who:'me',text:"What's my day look like?"},
+      {who:'dia',lines:["You've got 3 meetings today. Your 2pm with Sarah moved to <b>2:30</b>.",
+                        "I drafted replies to <b>4 emails</b>. Want me to send them?",
+                        "Top priority before 5: <b>finish the launch deck</b>."],
+       act:["Open calendar","Review drafts","Pin priority"]},
+      {who:'me',text:"Send them, and play something focused."},
+      {who:'dia',lines:["Done, <b>4 replies sent</b> from your Gmail.",
+                        "Now playing your <b>Deep Focus</b> playlist on Spotify."],
+       act:["4 sent","Spotify playing"]}
+    ];
+    function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+    function trim(){while(feed.children.length>5)feed.removeChild(feed.firstChild)}
+    function meMsg(t){var m=document.createElement('div');m.className='msg me';var b=document.createElement('div');b.className='bubble me';b.textContent=t;m.appendChild(b);feed.appendChild(m);trim()}
+    function diaMsg(){var m=document.createElement('div');m.className='msg dia';var a=document.createElement('span');a.className='av';var b=document.createElement('div');b.className='bubble dia';b.innerHTML='<span class="typing"><i></i><i></i><i></i></span>';m.appendChild(a);m.appendChild(b);feed.appendChild(m);trim();return b}
+    function typeBox(t){return new Promise(function(res){diText.textContent='';diBox.classList.remove('has');var i=0;(function s(){if(i<=t.length){diText.textContent=t.slice(0,i);if(i>0)diBox.classList.add('has');i++;setTimeout(s,42+Math.random()*55)}else res()})()})}
+    async function reveal(b,lines,act){b.innerHTML='';for(var j=0;j<lines.length;j++){var p=document.createElement('p');p.className='ln';p.innerHTML=lines[j];b.appendChild(p);await wait(40);p.classList.add('show');await wait(660)}if(act){var a=document.createElement('div');a.className='demo-act';a.innerHTML=act.map(function(x){return '<span>'+x+'</span>'}).join('');b.appendChild(a)}}
+    function staticRender(){script.forEach(function(s){if(s.who==='me')meMsg(s.text);else{var b=diaMsg();b.innerHTML='';s.lines.forEach(function(l){var p=document.createElement('p');p.className='ln show';p.innerHTML=l;b.appendChild(p)});if(s.act){var a=document.createElement('div');a.className='demo-act';a.innerHTML=s.act.map(function(x){return '<span>'+x+'</span>'}).join('');b.appendChild(a)}}})}
+    async function run(){while(true){feed.innerHTML='';diText.textContent='';diBox.classList.remove('has');
+      for(var k=0;k<script.length;k++){var s=script[k];
+        if(s.who==='me'){await wait(320);await typeBox(s.text);await wait(360);meMsg(s.text);diText.textContent='';diBox.classList.remove('has');await wait(520)}
+        else{var b=diaMsg();await wait(1150);await reveal(b,s.lines,s.act);await wait(1050)}}
+      await wait(3200)}}
+    if(reduce){staticRender();return}
+    run();
+  })();
+</script>
+<script src="hands.js" defer></script>
+<script src="herovideo.js" defer></script>
+<script src="download.js" defer></script>
+<script src="cookies.js" defer></script>
+</body>
+</html>

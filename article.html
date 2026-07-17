@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>heydia · Blog</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+</head>
+<body>
+
+<nav><div class="nav-in">
+  <a class="word" href="index.html"><span class="mark"></span>heydia</a>
+  <div class="nav-mid">
+    <a href="features.html">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="blog.html">Blog</a>
+    <a href="help.html">Help</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-end">
+    <a class="login" href="https://heydia.onrender.com">Log in</a>
+    <a class="btn btn-primary" href="https://heydia.onrender.com">Get early access</a>
+  </div>
+</div></nav>
+
+<article class="article wrap narrow" id="art">
+  <p style="color:var(--soft)">Loading…</p>
+</article>
+
+<section class="wrap narrow" style="padding:0 28px 70px">
+  <a href="blog.html" class="btn btn-soft">← All posts</a>
+</section>
+
+<footer><div class="wrap">
+  <div class="foot-grid">
+    <div><div class="word"><span class="mark"></span>heydia</div><p style="font-size:14.5px;max-width:30ch">The calm assistant that runs your day.</p></div>
+    <div><h4>Product</h4><ul><li><a href="features.html">Features</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="https://heydia.onrender.com">Download</a></li></ul></div>
+    <div><h4>Resources</h4><ul><li><a href="news.html">News</a></li><li><a href="blog.html">Blog</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="mailto:dia.customersupport@gmail.com">Contact</a></li></ul></div>
+  </div>
+  <div class="foot-bottom"><span>© 2026 heydia. All rights reserved.</span><span>Made for your day.</span></div>
+</div></footer>
+
+<script>
+const POSTS = {
+  "flat-dark": {
+    tag: "Design · Jun 2026", title: "Why we went flat, dark, and quiet",
+    cover: "screens/themes.png",
+    body: [
+      "Most assistant apps shout. Gradients, glows, a dozen accent colours fighting for your eye. We tried that, and every time we opened heydia it felt like one more thing demanding attention, the exact opposite of what an assistant should be.",
+      "So we rebuilt around a single idea: the surface should disappear so your day can come forward. That's onyx, our flat, near-black default. No translucent murk, no decorative blur, just calm panels, readable text, and one quiet accent.",
+      "Flat doesn't mean lifeless. The heydia mark is a clean squircle whose dot follows your cursor. The navigation uses one liquid-glass pill that springs between tabs. The motion is there, it's just polite, it never gets between you and the thing you came to do.",
+      "We also shipped a real light mode for onyx, so the same calm holds whether you work at midnight or noon. The point was never the colour. It was making a tool you can look at all day without it looking back."
+    ],
+  },
+  "screen-time": {
+    tag: "Focus · Jun 2026", title: "Screen time you'll actually act on",
+    cover: "screens/day.png",
+    body: [
+      "Most screen-time dashboards are guilt machines. They show you a scary number, you feel bad for a second, and nothing changes. We wanted the opposite: a calm instrument that helps you steer, not shame.",
+      "heydia tracks where your day on screen actually goes, automatically and privately, on your device. It sorts your time into deep work, communication, browsing, and the stuff that pulls you away, then shows it as a focus ratio, a clean breakdown, and a seven-day trend.",
+      "The useful part is what it does with that. Set a daily limit on a distracting app, and when you cross it heydia doesn't nag, it shows a full-screen 'lock in' prompt, the same gentle friction the best focus apps use. Link an app to a goal and watch the time it earns toward something you care about.",
+      "No streaks to break, no badges to chase. Just an honest read and one nudge to come back to what matters."
+    ],
+  },
+  "one-app": {
+    tag: "Product · Jun 2026", title: "One assistant instead of a dozen tabs",
+    cover: null,
+    body: [
+      "Your day is scattered across a dozen apps: calendar here, inbox there, notes in a third place, tasks in a fourth, and a browser full of tabs holding it all together with hope.",
+      "heydia's bet is that the calm comes from consolidation. One place that reads your calendar and inbox, takes your meeting notes, sorts your priorities into a clear matrix, and acts across the apps you already use, behind a single ask.",
+      "You don't learn a new system. You connect Gmail, Calendar, Notion, Slack and the rest with a click each, then just talk. 'What's on today?' 'Draft a reply to Sarah.' 'Break this project into steps.' heydia does the reaching-across so you don't have to.",
+      "It's not another standalone app to check. It's the one that checks the others for you."
+    ],
+  },
+  "byok": {
+    tag: "Privacy · Jun 2026", title: "Bring your own key, keep your own data",
+    cover: "screens/chat.png",
+    body: [
+      "The quiet cost of most AI apps is your data. Your prompts, your documents, your context, all flowing through someone else's servers, sometimes to train the next model.",
+      "heydia is built the other way. You can bring your own AI key, so requests go through your own provider account, at cost, with no markup and no middleman holding your prompts. We store your key encrypted and use it only for the requests you trigger.",
+      "Your content, your conversations, your connected accounts, are yours. We don't sell them, don't show ads, and never use them to train any model. Row-level security means you can only ever reach your own data, and you can export or delete everything in a click.",
+      "Privacy shouldn't be a setting you hunt for. It's the default."
+    ],
+  },
+  "goals": {
+    tag: "Habits · Jun 2026", title: "Goals that pull, not nag",
+    cover: null,
+    body: [
+      "A goal you avoid opening isn't a goal, it's a reminder of failure. Most goal apps become exactly that: a list that grows guiltier the longer you ignore it.",
+      "heydia's goals are built to be opened. Pick a horizon, daily, weekly, monthly, or yearly, and each goal carries a progress ring that fills with light as you check off sub-tasks. Stuck on where to start? heydia suggests goals from what it knows about you, and breaks any of them into concrete steps with AI.",
+      "The clever bit is the link to your real time: connect an app to a goal and the hours you spend in it count toward the goal automatically. Your focus becomes visible progress, not a promise.",
+      "Less nagging. More pull."
+    ],
+  },
+};
+
+(function () {
+  const slug = new URLSearchParams(location.search).get("p") || "flat-dark";
+  const p = POSTS[slug] || POSTS["flat-dark"];
+  document.title = p.title + " · heydia";
+  const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  const cover = p.cover
+    ? '<div class="art-cover"><img src="' + p.cover + '" alt="" onerror="this.parentNode.innerHTML=\'<div class=cmark><span class=mark></span></div>\'"></div>'
+    : '<div class="art-cover"><div class="cmark"><span class="mark"></span></div></div>';
+  document.getElementById("art").innerHTML =
+    '<p class="ptag" style="text-align:center;color:var(--faint);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em">' + esc(p.tag) + '</p>' +
+    '<h1 class="art-title">' + esc(p.title) + '</h1>' +
+    cover +
+    p.body.map((para) => "<p>" + esc(para) + "</p>").join("");
+})();
+</script>
+<script src="cookies.js" defer></script>
+</body>
+</html>

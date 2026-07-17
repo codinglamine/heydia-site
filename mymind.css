@@ -1,0 +1,164 @@
+/* heydia homepage — MyMind-inspired: warm off-white, big bold sans, whitespace-heavy, playful
+   rounded cards, minimal accents. Self-contained (does not use the dark styles.css). */
+:root{
+  --bg:#fbf9f4; --bg2:#ffffff; --ink:#1c1b18; --soft:#6d6a62; --faint:#a6a199;
+  --line:rgba(20,18,12,.09); --line2:rgba(20,18,12,.14);
+  --accent:#ff5b39; --warm:#ffb020; --green:#37b87a; --blue:#4a7dff; --violet:#8b6cff; --pink:#ff7eb6;
+  --sans:'Inter',system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:'Sora','Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:60;background:rgba(251,249,244,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1180px;margin:0 auto;padding:15px 28px;display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;letter-spacing:-.02em}
+.brand .mark{width:26px;height:26px;border-radius:8px;background:#1c1b18;position:relative;flex-shrink:0}
+.brand .mark::after{content:"";position:absolute;top:7px;left:7px;width:8px;height:8px;border-radius:50%;background:#fbf9f4}
+.nav-mid{display:flex;gap:6px;margin-left:6px}
+.nav-mid a{font-size:15px;color:var(--soft);font-weight:500;padding:7px 12px;border-radius:10px;transition:background .15s,color .15s}
+.nav-mid a:hover,.nav-mid a.active{color:var(--ink);background:rgba(20,18,12,.05)}
+.nav-end{margin-left:auto;display:flex;align-items:center;gap:14px}
+.nav-end .login{font-size:15px;font-weight:600;color:var(--ink)}
+@media(max-width:780px){.nav-mid{display:none}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:.72em 1.35em;font-weight:600;font-size:15px;font-family:inherit;cursor:pointer;border:1px solid transparent;transition:transform .15s,filter .15s,background .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn-dark{background:#1c1b18;color:#fff}
+.btn-dark:hover{filter:brightness(1.15)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-ghost{background:transparent;border-color:var(--line2);color:var(--ink)}
+.btn-ghost:hover{background:rgba(20,18,12,.04)}
+.btn-lg{padding:.95em 1.7em;font-size:16.5px}
+
+/* hero */
+.hero{text-align:center;padding:96px 28px 18px;max-width:1000px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--soft);background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:7px 14px;margin-bottom:26px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(44px,8.4vw,96px);line-height:.96;letter-spacing:-.038em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .sub{font-size:clamp(17px,2.1vw,21px);color:var(--soft);max-width:34ch;margin:24px auto 0}
+.hero-cta{display:flex;gap:12px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+.hero-note{margin-top:18px;font-size:13.5px;color:var(--faint)}
+
+/* scattered cards — the "everything bucket" visual */
+.scatter{position:relative;max-width:1120px;margin:30px auto 0;height:340px}
+@media(max-width:760px){.scatter{height:auto;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding:0 20px}}
+.card{position:absolute;background:var(--bg2);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 40px -22px rgba(40,30,10,.25);padding:16px;width:230px;transition:transform .3s}
+.card:hover{transform:translateY(-6px) rotate(0deg)!important;z-index:5}
+@media(max-width:760px){.card{position:static;width:46%;min-width:150px}}
+.card .k{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.card .t{font-size:14.5px;font-weight:600;margin-top:6px;line-height:1.35}
+.card .m{font-size:12.5px;color:var(--soft);margin-top:6px;line-height:1.45}
+.card .swatch{height:84px;border-radius:12px;margin-bottom:10px}
+.c1{left:2%;top:20px;transform:rotate(-5deg)}
+.c2{left:23%;top:120px;transform:rotate(3deg)}
+.c3{left:42%;top:0;transform:rotate(-2deg)}
+.c4{right:21%;top:130px;transform:rotate(4deg)}
+.c5{right:1%;top:30px;transform:rotate(-4deg)}
+
+/* sections */
+.section{padding:70px 0}
+.section.tint{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 44px}
+.sec-head .label{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,52px);letter-spacing:-.03em;line-height:1.04;margin:12px 0 0}
+.sec-head p{font-size:17px;color:var(--soft);margin-top:14px}
+
+/* manifesto — big bold statements */
+.manifesto{max-width:900px;margin:0 auto;text-align:center}
+.manifesto p{font-family:var(--display);font-weight:700;font-size:clamp(26px,4.4vw,44px);line-height:1.12;letter-spacing:-.025em;color:var(--ink);margin:0}
+.manifesto p .mut{color:var(--faint)}
+.manifesto .small{font-family:var(--sans);font-weight:400;font-size:17px;color:var(--soft);margin-top:24px;letter-spacing:0}
+
+/* feature cards grid */
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1080px;margin:0 auto}
+@media(max-width:880px){.fgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.fgrid{grid-template-columns:1fr}}
+.fcard{background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:26px;transition:transform .18s,box-shadow .18s}
+.fcard:hover{transform:translateY(-4px);box-shadow:0 20px 44px -26px rgba(40,30,10,.3)}
+.fcard .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px}
+.fcard h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.fcard p{font-size:14.5px;color:var(--soft);margin-top:8px;line-height:1.55}
+
+/* download row */
+.dl-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.dl{display:inline-flex;align-items:center;gap:12px;padding:.7em 1.2em;border-radius:16px;background:var(--bg2);border:1px solid var(--line2);color:var(--ink);transition:transform .15s,background .15s;cursor:pointer}
+.dl:hover{transform:translateY(-2px);background:#fff}
+.dl svg{flex-shrink:0}
+.dl span{display:flex;flex-direction:column;line-height:1.05;text-align:left}
+.dl small{font-size:10.5px;color:var(--faint)}
+.dl b{font-size:15px;font-weight:700}
+.dl.soon{opacity:.5;cursor:not-allowed}
+.dl.soon:hover{transform:none;background:var(--bg2)}
+.soon-tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);background:rgba(20,18,12,.08);border-radius:6px;padding:2px 6px;font-weight:700}
+
+/* big CTA */
+.cta{text-align:center;max-width:760px;margin:0 auto}
+.cta h2{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,64px);letter-spacing:-.035em;line-height:1}
+.cta p{font-size:18px;color:var(--soft);margin:16px auto 30px;max-width:40ch}
+
+/* footer */
+footer{background:var(--bg2);border-top:1px solid var(--line);padding:56px 0 40px;margin-top:30px}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr}}
+.foot-grid h4{font-size:13px;font-weight:700;margin-bottom:12px}
+.foot-grid ul{list-style:none}
+.foot-grid li{margin-bottom:9px}
+.foot-grid a{font-size:14px;color:var(--soft)}
+.foot-grid a:hover{color:var(--ink)}
+.foot-bottom{max-width:1120px;margin:36px auto 0;padding:20px 28px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:13px;color:var(--faint);flex-wrap:wrap;gap:10px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ── 3D renders (3dicons.co, CC0) + liquid glass ─────────────────────────── */
+.hero{position:relative}
+.hero>:not(.hero-3d):not(.lg-blob){position:relative;z-index:2}
+
+/* floating renders around the hero — slow bob + scroll parallax (JS moves the wrapper) */
+.hero-3d{position:absolute;inset:0;pointer-events:none;z-index:1}
+.f3w{position:absolute;left:var(--x);top:var(--y);will-change:transform}
+.f3d{display:block;width:var(--s);transform:rotate(var(--r));filter:drop-shadow(0 20px 32px rgba(40,30,10,.26));animation:f3float var(--d) ease-in-out infinite alternate}
+@keyframes f3float{from{translate:0 -9px}to{translate:0 11px}}
+@media(max-width:900px){.hero-3d{display:none}}
+@media(prefers-reduced-motion:reduce){.f3d{animation:none}}
+
+/* liquid colour blobs behind the hero — soft, slow-morphing washes of the brand hues */
+.lg-blob{position:absolute;z-index:0;filter:blur(26px);opacity:.55;pointer-events:none;animation:lgmorph 16s ease-in-out infinite alternate}
+.lg-blob.b1{width:480px;height:380px;left:6%;top:6%;background:radial-gradient(closest-side,rgba(255,91,57,.18),transparent 72%)}
+.lg-blob.b2{width:520px;height:420px;right:4%;top:26%;background:radial-gradient(closest-side,rgba(139,108,255,.16),transparent 72%);animation-delay:-8s}
+@keyframes lgmorph{from{transform:translate(0,0) scale(1)}to{transform:translate(28px,-20px) scale(1.12)}}
+@media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
+
+/* glass chip — frosted pill (eyebrow) */
+.glass-chip{background:rgba(255,255,255,.5)!important;backdrop-filter:blur(12px) saturate(1.5);-webkit-backdrop-filter:blur(12px) saturate(1.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 8px 24px -14px rgba(40,30,10,.3)}
+
+/* glassy download tiles */
+.dl{background:rgba(255,255,255,.55);backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+
+/* 3D icon peeking over the corner of each scatter card */
+.c3d{position:absolute;top:-26px;right:-16px;width:58px;transform:rotate(8deg);filter:drop-shadow(0 10px 16px rgba(40,30,10,.3));pointer-events:none}
+@media(max-width:760px){.c3d{top:-18px;right:-8px;width:46px}}
+
+/* feature-card 3D icons */
+.ic3d{width:58px;height:58px;object-fit:contain;margin-bottom:14px;filter:drop-shadow(0 12px 18px rgba(40,30,10,.22));transition:transform .25s}
+.fcard:hover .ic3d{transform:translateY(-3px) rotate(-4deg) scale(1.06)}
+
+/* liquid-glass sheen — a specular sweep across cards on hover */
+.fcard{position:relative;overflow:hidden}
+.card::after,.fcard::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.5) 50%,transparent 58%);background-size:240% 100%;background-position:130% 0;opacity:0;pointer-events:none}
+.card:hover::after,.fcard:hover::after{opacity:1;animation:lgsheen .9s ease forwards}
+@keyframes lgsheen{to{background-position:-40% 0}}
+@media(prefers-reduced-motion:reduce){.card:hover::after,.fcard:hover::after{animation:none;opacity:0}}
+
+/* use-case strip — whitespace-separated, no boxes (mymind style) */
+.uses{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding:0 28px}
+@media(max-width:860px){.uses{grid-template-columns:1fr 1fr;gap:28px}}
+.use b{font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:-.01em}
+.use p{font-size:14.5px;color:var(--soft);margin-top:8px;line-height:1.55;max-width:26ch}
